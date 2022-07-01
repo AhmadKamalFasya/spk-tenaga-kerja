@@ -2,11 +2,7 @@
 
 use App\Http\Controllers\auth\loginController;
 use App\Http\Controllers\auth\RegisterController;
-use App\Http\Controllers\ClientProfileController;
-use App\Http\Controllers\KaryawanController;
-use App\Http\Controllers\RevenueController;
-use App\Http\Controllers\SalesRevenueController;
-use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\PesertaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +29,5 @@ Route::prefix('auth')->group(function () {
   Route::post('/logout', [loginController::class, 'logout'])->middleware('auth:sanctum');
 });
 
-// === CLIENT ===
-
-// Karyawan 
-Route::resource('/karyawan', KaryawanController::class)->except('create', 'edit');
+// Peserta 
+Route::resource('/peserta', PesertaController::class)->except('create', 'edit');
