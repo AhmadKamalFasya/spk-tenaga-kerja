@@ -49,8 +49,10 @@ class KriteriaController extends Controller
   public function store(Request $request)
   {
     $validator = Validator::make($request->all(), [
+      'id_kriteria' => ['required'],
       'id_peserta' => ['required'],
-      'kriteria' => ['required']
+      'kriteria' => ['required'],
+      'nilai' => ['required'],
     ]);
 
     if ($validator->fails()) {
@@ -59,6 +61,7 @@ class KriteriaController extends Controller
 
     try {
       $kriteria = Kriteria::create([
+        'id_kriteria' => $request->id_kriteria,
         'id_peserta' => $request->id_peserta,
         'kriteria' => $request->kriteria,
         'nilai' => $request->nilai
@@ -78,18 +81,16 @@ class KriteriaController extends Controller
   /**
    * Display the specified resource.
    *
-   * @param  int  $id
+   * @param  int  $id_kriteria
    * @return \Illuminate\Http\Response
    */
   public function show($id)
   {
-    $peserta = Kriteria::findOrFail($id);
-
+    $peserta = Kriteria::where('id_kriteria', $id)->get();
     $response = [
       'message' => 'Detail Peserta',
       'peserta' => $peserta
     ];
-
     return response()->json($response, Response::HTTP_OK);
   }
 
@@ -115,13 +116,10 @@ class KriteriaController extends Controller
   {
     $kriteria = Kriteria::findOrFail($id);
     $validator = Validator::make($request->all(), [
-      'nama' => ['required'],
-      'tempat_tgl_lahir' => ['required'],
-      'alamat' => ['required'],
-      'jenis_kelamin' => ['required'],
-      'no_hp' => ['required'],
-      'pendidikan' => ['required'],
-      'no_ktp' => ['required']
+      'id_kriteria' => ['required'],
+      'id_peserta' => ['required'],
+      'kriteria' => ['required'],
+      'nilai' => ['required'],
     ]);
     if ($validator->fails()) {
       return response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);

@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kriteria', function (Blueprint $table) {
-            $table->id();
-            $table->string('id_kriteria');
+        Schema::create('seleksi', function (Blueprint $table) {
+            $table->id('id');
             $table->integer('id_peserta');
+            $table->string('id_kriteria');
+            $table->string('nama');
             $table->string('kriteria');
-            $table->integer('nilai');
+            $table->string('nilai');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kriteri');
+        Schema::dropIfExists('seleksi');
     }
 };
