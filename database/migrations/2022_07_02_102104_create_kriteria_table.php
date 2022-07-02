@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('kriteria', function (Blueprint $table) {
             $table->id();
+            $table->integer('id_peserta');
+            $table->string('kriteria');
+            $table->integer('nilai');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kriteria');
+        Schema::dropIfExists('kriteri');
     }
 };

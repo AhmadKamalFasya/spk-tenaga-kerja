@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\auth\loginController;
 use App\Http\Controllers\auth\RegisterController;
+use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\MytestController;
 use App\Http\Controllers\PesertaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +33,9 @@ Route::prefix('auth')->group(function () {
 
 // Peserta 
 Route::resource('/peserta', PesertaController::class)->except('create', 'edit');
+
+// Peserta 
+Route::resource('/kriteria', KriteriaController::class)->except('create', 'edit');
+
+// Mytest
+Route::resource('/mytest', MytestController::class)->except('create', 'edit');

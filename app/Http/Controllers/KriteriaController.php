@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Peserta;
+use App\Models\Kriteria;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class PesertaController extends Controller
+class KriteriaController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -19,11 +19,11 @@ class PesertaController extends Controller
    */
   public function index()
   {
-    $peserta = Peserta::orderBy('nama', 'DESC')->get();
+    $kriteria = Kriteria::orderBy('id_peserta', 'DESC')->get();
 
     $response = [
-      'message' => 'Daftar Peserta',
-      'data' => $peserta
+      'message' => 'Daftar Kriteria',
+      'data' => $kriteria
     ];
 
     return response()->json($response, Response::HTTP_OK);
@@ -49,13 +49,8 @@ class PesertaController extends Controller
   public function store(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      "nama" => ['required'],
-      "tempat_tgl_lahir" => ['required'],
-      'alamat' => ['required'],
-      'jenis_kelamin' => ['required'],
-      'no_hp' => ['required'],
-      'pendidikan' => ['required'],
-      'no_ktp' => ['required']
+      'id_peserta' => ['required'],
+      'kriteria' => ['required']
     ]);
 
     if ($validator->fails()) {
@@ -63,10 +58,14 @@ class PesertaController extends Controller
     }
 
     try {
-      $peserta = Peserta::create($request->all());
+      $kriteria = Kriteria::create([
+        'id_peserta' => $request->id_peserta,
+        'kriteria' => $request->kriteria,
+        'nilai' => $request->nilai
+      ]);
       $response = [
-        'message' => 'Peserta Created',
-        'data' => $peserta
+        'message' => 'Kriteria Created',
+        'data' => $kriteria
       ];
       return response()->json($response, Response::HTTP_CREATED);
     } catch (QueryException $e) {
@@ -84,7 +83,7 @@ class PesertaController extends Controller
    */
   public function show($id)
   {
-    $peserta = Peserta::findOrFail($id);
+    $peserta = Kriteria::findOrFail($id);
 
     $response = [
       'message' => 'Detail Peserta',
@@ -114,7 +113,7 @@ class PesertaController extends Controller
    */
   public function update(Request $request, $id)
   {
-    $peserta = Peserta::findOrFail($id);
+    $kriteria = Kriteria::findOrFail($id);
     $validator = Validator::make($request->all(), [
       'nama' => ['required'],
       'tempat_tgl_lahir' => ['required'],
@@ -128,10 +127,10 @@ class PesertaController extends Controller
       return response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
     try {
-      $peserta->update($request->all());
+      $kriteria->update($request->all());
       $response = [
-        'message' => 'Peserta berhasil diupdate',
-        'data' => $peserta
+        'message' => 'Kriteria berhasil diupdate',
+        'data' => $kriteria
       ];
       return response()->json($response, Response::HTTP_OK);
     } catch (QueryException $e) {
@@ -149,9 +148,9 @@ class PesertaController extends Controller
    */
   public function destroy($id)
   {
-    $peserta = Peserta::findOrFail($id);
+    $kriteria = Kriteria::findOrFail($id);
     try {
-      $peserta->delete();
+      $kriteria->delete();
       $response = [
         'message' => 'Data berhasil dihapus.'
       ];
