@@ -19,8 +19,16 @@ class PesertaController extends Controller
    */
   public function index()
   {
-    //
+    $peserta = Peserta::orderBy('nama', 'DESC')->get();
+
+    $response = [
+      'message' => 'Daftar Peserta',
+      'data' => $peserta
+    ];
+
+    return response()->json($response, Response::HTTP_OK);
   }
+
 
   /**
    * Show the form for creating a new resource.
@@ -74,9 +82,16 @@ class PesertaController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function show($id)
+  public function show($id)s
   {
-    //
+    $peserta = Peserta::findOrFail($id);
+
+    $response = [
+      'message' => 'Detail Peserta',
+      'peserta' => $peserta
+    ];
+
+    return response()->json($response, Response::HTTP_OK);
   }
 
   /**
@@ -99,7 +114,31 @@ class PesertaController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    $peserta = Peserta::findOrFail($id);
+    $validator = Validator::make($request->all(), [
+      'nama' => ['required'],
+      'tempat_tgl_lahir' => ['required'],
+      'alamat' => ['required'],
+      'jenis_kelamin' => ['required'],
+      'no_hp' => ['required'],
+      'pendidikan' => ['required'],
+      'no_ktp' => ['required']
+    ]);
+    if ($validator->fails()) {
+      return response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+    try {
+      $peserta->update($request->all());
+      $response = [
+        'message' => 'Peserta berhasil diupdate',
+        'data' => $peserta
+      ];
+      return response()->json($response, Response::HTTP_OK);
+    } catch (QueryException $e) {
+      return response()->json([
+        'message' => 'Failed ' . $e->errorInfo
+      ]);
+    }
   }
 
   /**
@@ -110,6 +149,17 @@ class PesertaController extends Controller
    */
   public function destroy($id)
   {
-    //
+    $peserta = Peserta::findOrFail($id);
+    try {
+      $peserta->delete();
+      $response = [
+        'message' => 'Data berhasil dihapus.'
+      ];
+      return response()->json($response, Response::HTTP_OK);
+    } catch (QueryException $e) {
+      return response()->json([
+        'message' => 'Failed ' . $e->errorInfo
+      ]);
+    }
   }
 }
